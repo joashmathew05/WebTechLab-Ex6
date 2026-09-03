@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JM Interior Design Studio</title>
+
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
+  body { background:#f4f4f4; }
+
+  header { background:brown; color:white; text-align:center; padding:20px; }
+  header img { width:80px; margin-bottom:10px; }
+
+  nav { background:gray; }
+  nav ul { list-style:none; display:flex; }
+  nav ul li { position:relative; }
+  nav ul li a { color:white; text-decoration:none; display:block; padding:15px 40px; }
+  nav ul li:hover { background:darkred; }
+
+  .dropdown { display:none; position:absolute; background:green; width:170px; }
+  .dropdown li { width:100%; }
+  .dropdown li a { padding:12px; }
+  nav ul li:hover .dropdown { display:block; }
+
+  .container { display:flex; justify-content:center; gap:50px; padding:35px; }
+  .box { background:white; width:320px; padding:25px; border-radius:10px; box-shadow:2px 2px 10px gray; }
+  .box h2 { text-align:center; color:brown; margin-bottom:20px; }
+
+  label { font-weight:bold; }
+  input[type=text], input[type=email], input[type=password] {
+    width:100%; padding:10px; margin:5px 0 15px;
+  }
+  input[type=submit], button {
+    width:100%; padding:10px; background:brown; color:white;
+    border:none; cursor:pointer; margin-top:5px;
+  }
+  input[type=submit]:hover, button:hover { background:darkred; }
+
+  #clock { text-align:center; font-size:22px; font-weight:bold; color:brown; padding:15px; }
+  #welcome { text-align:center; font-size:18px; margin:10px; }
+
+  #animationArea {
+    width:400px; height:60px; margin:20px auto; border:2px solid brown;
+    position:relative; background:white;
+  }
+  #movingBox { width:40px; height:40px; background:brown; position:absolute; top:8px; left:0; }
+
+  .message { color:green; text-align:center; margin-top:10px; }
+  footer { background:brown; color:white; text-align:center; padding:15px; }
+</style>
+</head>
+
+<body>
+
+<header>
+  <img src="https://cdn-icons-png.flaticon.com/512/619/619034.png" alt="Logo">
+  <h1 id="title">JM Interior Design Studio</h1>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li><a href="#">About</a></li>
+    <li>
+      <a href="#">Projects</a>
+      <ul class="dropdown">
+        <li><a href="#">Living Room</a></li>
+        <li><a href="#">Bedroom</a></li>
+        <li><a href="#">Kitchen</a></li>
+        <li><a href="#">Office</a></li>
+      </ul>
+    </li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>
+
+<div id="clock"></div>
+<p id="welcome">Welcome to JM Interior Design Studio</p>
+
+<section class="container">
+  <div class="box">
+    <h2>Sign In</h2>
+    <form id="signinForm" data-type="login">
+      <label>Username</label>
+      <input type="text" id="loginUser" placeholder="Enter Username">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="Enter Password">
+      <input type="submit" value="Sign In">
+      <p class="message"></p>
+    </form>
+  </div>
+
+  <div class="box">
+    <h2>Sign Up</h2>
+    <form id="signupForm" data-type="register">
+      <label>Name</label>
+      <input type="text" id="name" placeholder="Enter Name">
+      <label>Email</label>
+      <input type="email" id="email" placeholder="Enter Email">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter Password">
+      <input type="submit" value="Sign Up">
+      <p class="message"></p>
+    </form>
+  </div>
+</section>
+
+<div class="box" style="margin:20px auto;">
+  <h2>JavaScript Features</h2>
+
+  <button onclick="changeStyle()">Change Style</button>
+  <button onclick="hideText()">Hide Welcome</button>
+  <button onclick="showText()">Show Welcome</button>
+
+  <div id="animationArea">
+    <div id="movingBox"></div>
+  </div>
+
+  <button onclick="startAnimation()">Start Animation</button>
+  <button onclick="stopAnimation()">Stop Animation</button>
+
+  <p id="designer" style="text-align:center; margin-top:15px;">Interior Designer</p>
+</div>
+
+<footer id="footer">
+  <p>Karunya Institute of Technology and Sciences</p>
+  <p>© 2026 URK24CS1102 - Web Technology Lab</p>
+</footer>
+
+<script>
+// Clock
+setInterval(displayClock, 1000);
+displayClock();
+function displayClock() {
+  const d = new Date();
+  document.getElementById("clock").innerHTML = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+}
+
+// Style change
+function changeStyle() {
+  const title = document.getElementById("title");
+  title.style.color = "yellow";
+  title.style.fontSize = "35px";
+}
+
+// Show / Hide welcome text
+function hideText() { document.getElementById("welcome").style.display = "none"; }
+function showText() { document.getElementById("welcome").style.display = "block"; }
+
+setTimeout(() => {
+  document.getElementById("welcome").innerHTML = "Create beautiful spaces with us!";
+}, 3000);
+
+// Shared form validation for Sign In / Sign Up
+function handleForm(e) {
+  e.preventDefault();
+  const form = e.target;
+  const inputs = [...form.querySelectorAll("input[type=text], input[type=email], input[type=password]")];
+  const msg = form.querySelector(".message");
+  const empty = inputs.some(i => i.value.trim() === "");
+
+  msg.innerHTML = form.dataset.type === "login"
+    ? (empty ? "Please fill all fields" : "Welcome " + inputs[0].value)
+    : (empty ? "Fill all details" : "Registration Successful");
+}
+document.getElementById("signinForm").addEventListener("submit", handleForm);
+document.getElementById("signupForm").addEventListener("submit", handleForm);
+
+// Mouse events on title
+const title = document.getElementById("title");
+title.addEventListener("mouseover", () => title.style.color = "yellow");
+title.addEventListener("mouseout", () => title.style.color = "white");
+
+// Animation
+let animation, position = 0;
+function startAnimation() {
+  animation = setInterval(() => {
+    if (position >= 350) clearInterval(animation);
+    else document.getElementById("movingBox").style.left = ++position + "px";
+  }, 10);
+}
+function stopAnimation() { clearInterval(animation); }
+
+// Class and Object
+class Designer {
+  constructor(name) { this.name = name; }
+  display() { return this.name + " - Interior Designer"; }
+}
+document.getElementById("designer").innerHTML = new Designer("JM Studio").display();
+
+// Footer click
+document.getElementById("footer").addEventListener("click", () => {
+  alert("Thank you for visiting JM Interior Design Studio");
+});
+</script>
+
+</body>
+</html>
